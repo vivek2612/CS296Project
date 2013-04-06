@@ -29,14 +29,12 @@ namespace cs296
 {
   //! This is the class that sets up the Box2D simulation world
   //! Notice the public inheritance - why do we inherit the base_sim_t class?
-  //! Answer : base_sim_t class consists of some basic methods that are required to set up the simulation world. \n
-  //! So instead of making those methods again, we inherit base_sim_t class to have those methods included in dominos_t
-  //! class here.  
   class dominos_t : public base_sim_t
   {
   public:
     
-	dominos_t();
+    dominos_t();
+    
     static base_sim_t* create()
     {
       return new dominos_t;

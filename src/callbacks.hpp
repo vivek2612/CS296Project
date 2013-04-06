@@ -6,7 +6,6 @@
 
 //! Notice the use of these pre-processor directives on top of each header file
 //! Why are they used?
-//!The intent is to include the contents of the header file in the translation unit only once, even if the physical header file is included more than once. This can happen, for example, if you include the header directly in your source file, and it's also indirectly included via another header.
 #ifndef _CALLBACKS_HPP_
 #define _CALLBACKS_HPP_
 

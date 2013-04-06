@@ -31,7 +31,7 @@ namespace cs296
   int32 frame_period = 16;
   int32 main_window;
   float settings_hz = 60.0;
-  float32 view_zoom = 1.0f;
+  float32 view_zoom = 1.5f;
   int tx, ty, tw, th;
   bool r_mouse_down;
   b2Vec2 lastp;

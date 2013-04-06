@@ -44,6 +44,8 @@
 
 
 //! Notice the use of extern. Why is it used here?
+//! we put extern explicitly for C variables/functions when we want to declare them without defining them.
+//! "extern" keyword is used to extend the visibility of variables/functions(). 
 namespace cs296
 {
   extern int32 test_index;
@@ -61,8 +63,8 @@ namespace cs296
 
 //! This opens up the cs296 namespace
 //! What is the consequence of opening up a namespace?
+//! Opening a namespace allows you to use and access the variables,objects,classes and functions declared in the corresponding namespace. 
 using namespace cs296;
-
 
 //! This function creates all the GLUI gui elements
 void create_glui_ui(void)

@@ -39,142 +39,165 @@ using namespace std;
 
 namespace cs296
 {
-	/*! Documentation of the constructor of the dominos_t class modified to run the Rube Goldberg Machine of Group 14 \n
+	/*! <b>Documentation of the constructor of the dominos_t class modified to run the Rube Goldberg Machine of Group 14 </b>\n \n
 	 *	\b Ground \n
 	 *	This describes the construction of the Ground Block of the Rube Goldberg Machine. It is the lowest possible level in the simulation. 
 	 *	- b2EdgeShape shape - This describes the shape of the ground block. It is a single static edge from -90.0m to 90m in the x-coordinate and at a constant -15.0m in the y-coordinate. \n
 	 *	- b2BodyDef bd - The body definition associated with the static body. 
-	 *	- b2Body* b1 - The body associated with the static body Ground. It does not have a fixture as it is a static edge and is not required. \n 
+	 *	- b2Body\* b1 - The body associated with the static body Ground. It does not have a fixture as it is a static edge and is not required. \n 
+	 *	.
 	 *	<b> The Long Top Horizontal Shelf </b> \n
 	 *	This describes the long horizontal shelf at the top upon which the two balls which start the simulation lie.
 	 *	- b2PolygonShape shape - This describes the shape of the shelf (A box of dimensions 60.0mx0.20m)
 	 * 	- b2BodyDef bd - The body definition of the shelf which is located at 0.0m along the x axis and 50.0m along the y axis.	
-	 *	- b2Body* topShelf - The body object associated with the shelf. \n
+	 *	- b2Body\* topShelf - The body object associated with the shelf. \n
+	 *	.
 	 *	<b> The Balls Responsible for Starting The Simulation </b> \n
 	 *	- The falling ball from the top
-	 *		- b2Body* fallingTopBall - The Body Object associated with the ball falling from the top.
+	 *		- b2Body\* fallingTopBall - The Body Object associated with the ball falling from the top.
 	 *		- b2CircleShape circle - It is a cricle of radius 1.0m.
 	 *		- b2FixtureDef bodyfd - Defines the density (200.0), friction (0.1) and restitution (0.0) of the ball.
 	 *		- b2BodyDef bodybd - Body definition of the ball (Dyanmic which falls from 65m in the air) 
 	 *	- The right ball (The left ball is symmetric about x = 0.0)
-	 *		- b2Body* ball1 - The body object of the ball.
+	 *		- b2Body\* ball1 - The body object of the ball.
 	 *		- b2BodyDef ball1bd - The body definition of the ball at the right (it is at 1.8m along the x axis and at 51m along the y axis)
 	 *		- b2FixtureDef bodyfd - The same fixture is used for this ball as the one which collides with it except the density is 0.5f. \n
+	 *		.
+	 *	.
 	 *	<b> The Tilted Bar Attached To The Top-Shelf </b> \n
 	 *	- b2PolygonShape shape - It is a box with dimensions 4.0m and 0.2m rotated about it's end point by -45 degrees for the right side and 45 degrees for the left.
 	 *	- b2BodyDef bd - It's body definition consisting of the position of the object (32.6,48.5).
-	 *	- b2Body* tiltedBar - The body object associated with the tilted bar. \n
+	 *	- b2Body\* tiltedBar - The body object associated with the tilted bar. \n
+	 *	.
 	 *	<b> The Eyebrows Of The Bull </b> \n
 	 *	- b2PolygonShape shape - They are set as static boxes of dimentions (10.0x0.10f) rotated by pi/6 or -pi/6 depending which eyebrow it is
 	 *	- b2BodyDef bd - The body definition of the eyebrows positioned at (32.6,48.5) for the right and (-32.6,48.5) for the left.
-	 *	- b2Body* tiltedBar - The body object associated with the eyebrow. \n
+	 *	- b2Body\* tiltedBar - The body object associated with the eyebrow. \n
+	 *	.
 	 *	<b> The Eyeballs </b> \n
-	 *	- b2Body* ball or ball2 - Body objects associated with the two eyes of the bull.
+	 *	- b2Body\* ball or ball2 - Body objects associated with the two eyes of the bull.
 	 *	- b2CircleShape circle - They are circles of radius 2.0m.
 	 *	- b2BodyDef bodybd - The body definition of the eyes (they are set at (12.0,35.5) and (-12.0,35.5)).
 	 *	- b2FixtureDef bodyfd - The fixtures associated with the eyeballs. \n
+	 *	.
 	 *	<b> The Shelf Attached With Tilted Bar </b> \n
 	 *	The horizontal shelf which is attached to the bar at the top of the simulation through the slanted bars
 	 *	- b2PolygonShape shape - The shape definition of the shelf (Box with dim 4.0x0.20)
-	 *	- b2Body* shelf - Body object associated with shelf. It is a static body with no fixture definitions
+	 *	- b2Body\* shelf - Body object associated with shelf. It is a static body with no fixture definitions
 	 *	- b2BodyDef bd - The body definition of the shelf positioned at (35.0,47.0) and (-35.0,47.0) for the right and left sides. \n
+	 *	.
 	 *  <b> The Vertical Revolving Bar Attached To The Shelf Described Above </b> \n
 	 *	- b2PolygonShape shape2 - The shape of the vertical bar (0.2x4.0).
 	 *	- b2BodyDef bd2 - Body definition of the bar positioned at (37.2,49.0) or (-37.2,49.0) for left or right sides and is a dynamic body.
-	 *	- b2FixtureDef *fd - The fixture definition of the bar density  is 2.0 units.
-	 *	- b2Body* shelf - The body object corresponding to the bar. \n
+	 *	- b2FixtureDef \*fd - The fixture definition of the bar density  is 2.0 units.
+	 *	- b2Body\* shelf - The body object corresponding to the bar. \n
+	 *	.
 	 *  <b> The joint connecting the two components described above </b> \n
 	 *	- b2RevoluteJointDef jointDef - The definition of the revolute joint connecting the two bodies.
 	 *	- The local anchors are set on the two bodies and this gives the vertical bar the ability to rotate about the joint. \n
+	 *	.
 	 *	<b> Another Shelf </b> \n
 	 *	The shelf below the components described above
 	 *	- b2PolygonShape shape - The shape of the shelf (14mx0.2m)
 	 *	- It is static and it is positioned at (35.0,42.5) and (-35.0,42.5) for the right and left sides respectively. \n
+	 *	.
 	 *	The Vertical Bar on the shelf that stops the two balls at the top from moving further
 	 *	- b2PolygonShape shape2 - The dimensions of the bar (0.2x4.0)
 	 *	- It is positioned at the end of the shelf to prevent the balls from moving further. \n
+	 *	.
 	 *	The ball on the shelf set in motion by the revolving bar described in the section preceeding. These eventually
 	 *	roll into the the face of the bull.
 	 *	- b2CircleShape circle - Circle of radius 1.0m
 	 * 	- b2FixtureDef bodyfd - Friction, density, shape and restitution of the balls are set.
 	 *	- b2BodyDef bodybd - It is a dynamic body positioned at (36.0,43.5) and (-36,43.5) for the right and left sided.
-	 *	- b2Body* ball - The body object associated with the ball. \n
+	 *	- b2Body\* ball - The body object associated with the ball. \n
+	 *	.
 	 *	<b> The Three Rotatable Planks </b> \n
 	 *	The three rotating the planks which interact together when one is set in motion as part of the simulation. \n
 	 *	- b2PolygonShape shape - The common shape object used to determine the shapes of the three planks that interact together when rotated.
 	 *	- b2RevoluteJointDef jointDef - Common joint definition for each of the three planks.
 	 *	- b2BodyDef bd3 and b2BodyDef bd32 - Body definition of the invisible body used for connecting the revolute joint to the planks
 	 *	- b2BodyDef bd and b2BodyDef bd2 - Body definitions of the planks to which the joints are connected.
-	 *	- b2Body* body and b2Body* body2 - Actual body objects of the planks that are created in the for loop.
-	 *	- b2FixtureDef *fd - Fixture definitions of the planks redefined everytime in the for loop.
+	 *	- b2Body\* body and b2Body\* body2 - Actual body objects of the planks that are created in the for loop.
+	 *	- b2FixtureDef \*fd - Fixture definitions of the planks redefined everytime in the for loop.
 	 *	- The collideConnected value is set to false because we do not want the plank to collide with the body it's connected to. \n
-	 *	<b> The Path for the Ball <\b> \n
+	 *	.
+	 *	<b> The Path for the Ball </b> \n
 	 *	This provides a path for the ball which sets the interacting planks in motion to reach a state where they don't disturb the simulation.
 	 *	This forms a part of the bull that is perceivable from the simultion. \n
-	 *	- b2Body* b1 and b2 - The body objects of the two sides of the bull's face
+	 *	- b2Body\* b1 and b2 - The body objects of the two sides of the bull's face
 	 *	- b2EdgeShape shape - Common edge shape object which is intially from (25.0,34.0) to (10.0,9.8) in the world frame for the right part of the face
 	 *	and then goes from	(-25.0,34.0) to (-10.0,9.8) for the left part of the face.
 	 *	- It is a static object and does not require any fixture object. \n
+	 *	.
 	 *	<b> The Horizontal Edge </b> \n
 	 *	This forms the lowermost portion of the Bull's face \n
-	 *	- b2Body* b - The Body Object.
+	 *	- b2Body\* b - The Body Object.
 	 *	- b2EdgeShape shape - Edge shape from (10.0,9.8) to (-10.0,9.8) 
 	 *	- b2BodyDef bd - The body definition \n
+	 *	.
 	 *	<b> The Ball Placed on The Extreme Planks </b> \n
 	 *	This ball is used to set the pulley in motion to collapse the dominos in the simulation. \n
-	 *	- b2Body* ball and ball2 - These are the body objects of the two balls on the left and right sides of the simulation.
+	 *	- b2Body\* ball and ball2 - These are the body objects of the two balls on the left and right sides of the simulation.
 	 *	- b2CircleShape circle - The balls are of radius 0.5m.
 	 *	- b2FixtureDef bodyfd - The fixture definition of the balls (density = 10.5, friction = 0.1 and restitution = 0.0).
 	 *	- The balls are set at positions (38.5,37) and (-38.5,37) respectively. \n
+	 *	.
 	 *	<b> Triangular Wedge </b> \n
 	 *	The triangular wedge which provides a path for the ball in the simulation that falls into the pulley to set the pendulum in motion. \n
-	 *	- b2Body* sbody - The body object of the wedge.
+	 *	- b2Body\* sbody - The body object of the wedge.
 	 *	- b2PolygonShape poly - Defines the shape of a wedge with vertex coordinates (-3,0), (0,0) and (0,2.5) with respect to the position body definition that defines the wedge.
 	 *	- b2Vec2 vertices[] - Stores the vertices of the wedge.
 	 *	- b2FixtureDef wedgefd - The fixture definition for the wedge. Inspite of the body being static, we needed to define the friction and restitution of the body which was
 	 *	simplified by the usage of a fixture object.\n
+	 *	.
 	 *	<b> The Pulley Below The Wedge </b> \n
-	 *	- b2BodyDef *bd - The body definition of the box that collects the ball that is described in the section above, which is placed at (32,28) and (-32,28) respectively.
-	 *	- b2FixtureDef *fd1 fd2 and fd3 - The fixture definitions of the three sides of the box (the bottom, right and left sides respectively). Their densities and restitutions
+	 *	- b2BodyDef \*bd - The body definition of the box that collects the ball that is described in the section above, which is placed at (32,28) and (-32,28) respectively.
+	 *	- b2FixtureDef \*fd1 fd2 and fd3 - The fixture definitions of the three sides of the box (the bottom, right and left sides respectively). Their densities and restitutions
 	 *	are defined.
-	 *	- b2Body* box1 and box12 - The body objects which correspond to the boxes on the right and left sides of the simulation.
-	 *	- b2Body* box2  and box22- The plank objects on the other side of the pulley.
-	 *	- b2PulleyJointDef* myjoint - Common joint definition object used for both left and right sides of the simulation. They are connected to the box and the plank.
-	 *	- bcVec2 *Anchor* - Define the anchors on the body and in the world for the pulley joints. (Body anchors are in the body perspective while Ground anchors are in the world perspective). \n
+	 *	- b2Body\* box1 and box12 - The body objects which correspond to the boxes on the right and left sides of the simulation.
+	 *	- b2Body\* box2  and box22- The plank objects on the other side of the pulley.
+	 *	- b2PulleyJointDef\* myjoint - Common joint definition object used for both left and right sides of the simulation. They are connected to the box and the plank.
+	 *	- bcVec2 \*Anchor\* - Define the anchors on the body and in the world for the pulley joints. (Body anchors are in the body perspective while Ground anchors are in the world perspective). \n
+	 *	.
 	 *	<b> The revolving bar with the ball on it, which when triggered by the pulley sets the ball onto the curve. </b> \n
 	 *	The ball is used to trigger the pendulum which knocks the dominos down to set the next stage of the simulation. \n
 	 *	- b2PolygonShape shape - The dimensions of the bar (6.4x0.4).
 	 *	- b2BodyDef bd - The body definition of the bar (It being dynamic is the only property we require).
-	 *	- b2Body* body - The body object of the bar upon which the ball is placed.
-	 *	- b2Body* body3 - The invisible body that is used to connect the bar at a static location in the world.
+	 *	- b2Body\* body - The body object of the bar upon which the ball is placed.
+	 *	- b2Body\* body3 - The invisible body that is used to connect the bar at a static location in the world.
 	 *	- b2BodyDef bd3 - The body definition of the invisible body which is located at (44,32.3) and (-44,32.3) for the right and left sides which coincides with the centre of the bar.
 	 *	- b2RevoluteJointDef jointDef - The joint definition object that connects the invisible body and the bar together (collideConnected is set to false as we do not want the box to
 	 *	rotate but only translate).
-	 *	- b2Body* ball - The body object of the ball that is placed directly above the joint of the bar.
+	 *	- b2Body\* ball - The body object of the ball that is placed directly above the joint of the bar.
 	 *	- b2CircleShape circle - The shape ball which is a circle of radius 0.5m.
 	 *	- b2FixtureDef bodyfd - The fixture definition of the ball with it's attributes defined.
 	 *	- b2BodyDef bodybd - The body definition of the ball which defines it's position in the world. \n
+	 *	.
 	 *	<b> The Circular Path for the Ball </b> \n
 	 *	The ball falling off the revolving joint onto this curve collides with a pendulum to continue the simulation. The curve is approximated by using 11 short straight lines. \n
-	 *	- b2Body * curve1 and curve2 - The body objects of the curves on the left and right sides of the simulation.
+	 *	- b2Body \* curve1 and curve2 - The body objects of the curves on the left and right sides of the simulation.
 	 *	- b2EdgeShape[] shape1 and shape2 - These are the arrays that store the length and locations of each of the 11 lines used.
 	 *	- b2BodyDef[] shape1bd and shape2bd - These arrays store the body definitions needed for creating each of the lines.
 	 *	- b2FixtureDef[] shape1fd and shape2fd - These arrays store the fixture definitions of each of the curves (Friction and Restitution are required for these curves).
 	 *	- A circular arc is created for making the path of the ball. \n
+	 *	.
 	 *	<b> The Pendulum </b> \n
 	 *	The pendulum is triggered by the ball that falls on the curve and it in turn knocks down the set of dominos that follow. \n
-	 *	- b2Body* ball and ball2 - The bobs of the pendulum (the body objects).
+	 *	- b2Body\* ball and ball2 - The bobs of the pendulum (the body objects).
 	 *	- b2CircleShape circle - The shape of the bobs at the end of the pendulum (a circle of radius 0.3m).
 	 *	- b2BodyDef bodybd - The body definition of the bobs (They are dynamic and are located at (37,15.5) and (-37,15.5) for the right and left sides).
 	 *	- b2FixtureDef bodyfd - The fixture definition of the bobs (the friction, density and the restitution of the bobs are set here).
 	 *	- b2BodyDef bd2 - The body definition of the point where the pendulum is nailed to the wall.
-	 *	- b2Body* body2 and body22 - The body objects of the invisible bodies attached to the wall from where the bobs are suspended.
+	 *	- b2Body\* body2 and body22 - The body objects of the invisible bodies attached to the wall from where the bobs are suspended.
 	 *	- b2RevoluteJointDef jointDef - The joint definition of the joint which connects the bob of the pendulum to the nail in the wall. \n
+	 *	.
 	 *	<b> The Shelf With the Dominos </b> \n
 	 *	This is the shelf upon which the dominos in the simulation lie. \n
 	 *	- b2PolygonShape shape - The shape of the shelf (a box with dimensions 6.0x0.2).
 	 *	- b2BodyDef bd - The body definition of the shelf, positioned at (32.0,14.8) and (-32.0,14.8) for the right and left sides of the simulation.
-	 *	- b2Body* pan1 and pan2 - The body objects of the two shelves in the simulation. \n
+	 *	- b2Body\* pan1 and pan2 - The body objects of the two shelves in the simulation. \n
+	 *	.
 	 *	<b> The Dominos </b> \n
 	 *	These are the dominos that are set in motion by the collision with the bob of the pendulum. The last domino collides with the large sphere described
 	 *	in the next section to continue the simulation. \n
@@ -182,22 +205,94 @@ namespace cs296
 	 *	- b2FixtureDef fd - The fixture definition of the 6 identical dominos (density is 10.0 and friction is 0.1).
 	 *	- b2BodyDef bd - An object of b2BodyDef is created each time for each of the dominos in the simulation and represents
 	 *	  the body definition of the domino currently being constructed.
-	 *	- b2Body* body - The body object of the domino being constructed.
+	 *	- b2Body\* body - The body object of the domino being constructed.
 	 *	- The dominos are positioned on the shelf described in the above section. \n
+	 *	.
 	 *	<b> Slanted Path for Large Sphere </b> \n
 	 *	This is the path followed by the large sphere that is triggered by the falling of the last domino. \n
-	 *	- b2Body* b1 and b2 - These are the body objects corresponding to the two paths on the two sides of the simulaion.
+	 *	- b2Body\* b1 and b2 - These are the body objects corresponding to the two paths on the two sides of the simulaion.
 	 *	- b2EdgeShape shape - This defines the start and end points on the path.
 	 *	- b2BodyDef bd - This is the body definition required to make the path appear in the simulation.\n
+	 *	.
 	 *	<b> The Big Sphere on The Slope </b> \n
 	 *	This is the sphere that uses that path described in the section before this one to fall onto the see-saw structure
 	 *	and launch the light box into the air.
-	 *	- b2Body* spherebody and spherebody2 - The body objects corresponding to the two spheres on the two sides of the simulation.
+	 *	- b2Body\* spherebody and spherebody2 - The body objects corresponding to the two spheres on the two sides of the simulation.
 	 *	- b2CircleShape circle - The shape of the sphere which is a cricle of radius 2.0.
 	 *	- b2FixtureDef ballfd - The fixture definition of the sphere which sets the density (15.0), friction (0) and restitution (0) of the sphere.
 	 *	- b2BodyDef ballbd - The body definition of the sphere. The spheres are located at (26.0,14.8) and (-26.0,14.8) right above the path that
 	 *	  they roll down. \n
+	 *	.
 	 *	<b> The See-Saw Systems </b> \n
+	 *	This is the See-Saw structure at the bottom of the simulation which launches the box at one end of the See-Saw into the air when the large Sphere 
+	 *	described in the previous section lands on the other end.
+	 *	- b2Body\* sbody - The body object corresponding to the wedge of the sphere.
+	 *	- b2PolygonShape poly - The shape of the wedge.
+	 *	- b2Vec2[] vertices - The vertices of the wedge with respect to the body definition object that defines it.
+	 *	- b2FixtureDef wedgefd - The fixture definition of the wedge which stores the shape. The wedge is a static object.
+	 *	- b2BodyDef wedgebd - The body defintion of the wedge which determines where the wedge is to be placed (It is positioned at (21.0,-12.5) and (-21.0,-12.5)) for the right
+	 *	  and left sides of the simulation. \n
+	 *	- b2PolygonShape shape - This defines the shape of the plank on top of the wedge.
+	 *	- b2PolygonShape addend - This is an addition to the end of the plank which stops the ball that lands on the plank from interfering with the rest of the simulation.
+	 *	- b2BodyDef bd2 - This is the body definition of the plank which includes both the addend and the plank itself. (It is a dynamic object positioned at (21.0,-12.5) and (-21.0,-12.5) for the
+	 *	  two sides of the simulation).
+	 *	- b2Body\* body - This is the body object corresponding to the plank 
+	 *	- b2FixtureDef \*fd2 - The fixture definition of the plank which has density (0.1) and friction(1.0) defined beyond the shape already defined. 
+	 *	- b2FixtureDef \*adFix - The fixture definition of the addend which is identical to the fixture definition of the plank except for the shape and position relative to the body.
+	 *	- b2RevoluteJointDef jd - The definition of the joint which holds the plank and the wedge together. The anchors are defined such that the tip of the wedge is connected to the
+	 *	  middle of the plank.
+	 *	- b2PolygonShape shape2 - This refers to the light box at one end of the plank that gets launched into the air when the heavy sphere lands on the other end of the See-Saw.
+	 *	- The light box has dimensions (2.0x2.0).
+	 *	- b2BodyDef bd3 - The body definition of the light box stores information of its nature (It is dynamic) and position ((31.3,-9.0) for the right side and (-31.3,-9.0) for the left).
+	 *	- b2Body\* body3 - This is the body object corresponding to the light box on the plank.
+	 *	- b2FixtureDef \*fd3 - The fixtue definition of the light box. The density, restitution and friction of the box are set to 0.2, 0.5 and 1.0 respectively. \n
+	 *	.
+	 *	<b> The Shelf Redirecting Box </b> \n
+	 *	This is the box positioned to redirect the box launched into the air by the See-Saw system into the the pulley system meant for hoisting the house. \n
+	 *	- b2PolygonShape rightMirror and leftMirror - These are the shapes of the redirecting boxes on the right and left sides of the simulation respectively .
+	 *	- b2BodyDef rightMir and leftMir - The body definition of the boxes on the right and left sides of the simulation.
+	 *	- b2Body\* rightRefl and leftRefl - The body objects corresponding to the boxes.
+	 *	- They are rotated by pi/6 to redirect the box to the right location. 
+	 *	- They are of dimension 6.92820323x0.2 before their rotation. \n
+	 *	.
+	 *	<b> The House at The Bottom </b> \n
+	 *	This is the house that gets hoisted at the end of the simulation and is the purpose of the Rube-Goldberg Machine. \n
+	 *	- b2Body\* topOfHouse - This is the body object of the top of the house (The hat like structure at the top of the house).
+	 *	- It is defined outside of the section that constructs the rest of the house as it is required for the pulley.
+	 *	- b2FixtureDef\* leftTop - This is the fixture definition of the slanted section towards the top-left of the house (density is 0.1 with friction and restitution 0.0).
+	 *	- b2FixtureDef\* rightTop - This is the fixture definition of the slanted section towards the top-right of the house (density is 0.1 with friction and restitution 0.0).
+	 *	- b2PolygonShape rightTopShape and leftTopShape - These defines the shapes of the rightTop and leftTop fixtures described above.
+	 *	- b2BodyDef \*topDef - The Body definition for the top of the house (Both fixtures are used as part of the same body).
+	 *	- The fixtures are rotated by pi/4 and joined together in the body to form the house.
+	 *	- The dimensions of the individual segments are 10.0x0.2 before the rotation and are located at (3.535533906,0) and (-3.535533906,0) with respect to the body definition of the
+	 *	  top of the house.
+	 *	- b2BodyDef\* leftBot and rightBot - The body definitions of the left and right sections that dangle from the top of the house (The sides of the house). Gravity is set to 1.0 and the
+	 *	  positions of the bars are (7.035533906,-14.8) and (-7.035533906,-14.8) for the right and left bottom segments respectively.
+	 *	- b2FixtureDef\* leftBottom and rightBottom - The fixture definitions of the the two segments described above. They have dimensions 10.0x0.2.
+	 *	- They are dynamic and are attached to the top of the house through a joint.
+	 *	- b2PolygonShape leftBottomShape and rightBottomShape - The shapes of the two bottom segments are initialized here.
+	 *	- b2RevoluteJointDef leftJoint and rightJoint - The revolute joints which connect the three segments of the house (The top, the left bottom and the right bottom) together.
+	 *	  The ends of the bottom segment are connected to the ends of the bors forming the top of the house (away from the tip of the house). 
+	 *	- The revolute joint has to have the maxMotorTorque set because we want the lower segments of the house to eventually settle to a stable position.\n
+	 *	.
+	 *	<b> The Pulley System for Hoisting the House </b> \n
+	 *	This is the pulley system into which the light box falls to lift the house. \n
+	 *	- b2Body\* pulleyBoxRight and b2Body\* pulleyBoxLeft - These are the body objects that represent the boxs into which the light boxes fall into to act as a counterbalance to the house.
+	 *	  It is defined outside the section that constructs the rest of the box as it has to connect to the pulley being constructed later.
+	 *	- The Box for collecting the light box
+	 *		- b2FixtureDef\* leftVert, rightVert, centBottom. - These are the fixture definitions three sides of the box associated with the same body object. They are the vertical segments at the left
+	 *		  right and the horizontal segment at the bottom of the box respectively.
+	 *		- b2PolygonShape leftShape, rightShape, centShape - These are the shapes of the three segments described above in the same order.
+	 *		- Only the bottom bar has some weight to give it predictable behavior.
+	 *		- b2BodyDef\* box - The body definition of pulleyBoxRight and pulleyBoxLeft which are a collection of the three segments described above. \n
+	 *	- The pulley joint connecting the different segments
+	 *		- b2Vec2 topOfHouseAnchor, boxAnchor, GroundAnchor1 and GroundAnchor2 - The anchors which demarcate the points between which distance is to remain constant. The anchors
+	 *		  represent the point where the top of the house connects to the pulley joint, the box connects to the joint, the point in the world frame the segment of the pulley joint
+	 *		  connected to the box passes through and the corresponding point for the segment connected to the top of the house.
+	 *		- b2PulleyJointDef\* rightJoint and leftJoint - The corresponding joint definitions for the left and right sides of the simulation. \n
+	 *		.
+	 *	.
+	 *	<b> End of Documentation </b>
 	*/
   dominos_t::dominos_t()
   {

@@ -108,7 +108,7 @@ namespace cs296
 	 *	- b2Body* body and b2Body* body2 - Actual body objects of the planks that are created in the for loop.
 	 *	- b2FixtureDef *fd - Fixture definitions of the planks redefined everytime in the for loop.
 	 *	- The collideConnected value is set to false because we do not want the plank to collide with the body it's connected to. \n
-	 *	<b> The Path for the Ball </b> \n
+	 *	<b> The Path for the Ball <\b> \n
 	 *	This provides a path for the ball which sets the interacting planks in motion to reach a state where they don't disturb the simulation.
 	 *	This forms a part of the bull that is perceivable from the simultion. \n
 	 *	- b2Body* b1 and b2 - The body objects of the two sides of the bull's face
@@ -121,19 +121,84 @@ namespace cs296
 	 *	- b2EdgeShape shape - Edge shape from (10.0,9.8) to (-10.0,9.8) 
 	 *	- b2BodyDef bd - The body definition \n
 	 *	<b> The Ball Placed on The Extreme Planks </b> \n
-	 *	This ball is used to set the pendulum in motion to collapse the dominos in the simulation. \n
+	 *	This ball is used to set the pulley in motion to collapse the dominos in the simulation. \n
 	 *	- b2Body* ball and ball2 - These are the body objects of the two balls on the left and right sides of the simulation.
 	 *	- b2CircleShape circle - The balls are of radius 0.5m.
 	 *	- b2FixtureDef bodyfd - The fixture definition of the balls (density = 10.5, friction = 0.1 and restitution = 0.0).
 	 *	- The balls are set at positions (38.5,37) and (-38.5,37) respectively. \n
 	 *	<b> Triangular Wedge </b> \n
-	 *	The triangular wedge which provides a path for the ball in the simulation that falls into the curve to set the pendulum in motion. \n
+	 *	The triangular wedge which provides a path for the ball in the simulation that falls into the pulley to set the pendulum in motion. \n
 	 *	- b2Body* sbody - The body object of the wedge.
 	 *	- b2PolygonShape poly - Defines the shape of a wedge with vertex coordinates (-3,0), (0,0) and (0,2.5) with respect to the position body definition that defines the wedge.
 	 *	- b2Vec2 vertices[] - Stores the vertices of the wedge.
 	 *	- b2FixtureDef wedgefd - The fixture definition for the wedge. Inspite of the body being static, we needed to define the friction and restitution of the body which was
-	 *	simplified by the usage of a fixture object.
-	*/	
+	 *	simplified by the usage of a fixture object.\n
+	 *	<b> The Pulley Below The Wedge </b> \n
+	 *	- b2BodyDef *bd - The body definition of the box that collects the ball that is described in the section above, which is placed at (32,28) and (-32,28) respectively.
+	 *	- b2FixtureDef *fd1 fd2 and fd3 - The fixture definitions of the three sides of the box (the bottom, right and left sides respectively). Their densities and restitutions
+	 *	are defined.
+	 *	- b2Body* box1 and box12 - The body objects which correspond to the boxes on the right and left sides of the simulation.
+	 *	- b2Body* box2  and box22- The plank objects on the other side of the pulley.
+	 *	- b2PulleyJointDef* myjoint - Common joint definition object used for both left and right sides of the simulation. They are connected to the box and the plank.
+	 *	- bcVec2 *Anchor* - Define the anchors on the body and in the world for the pulley joints. (Body anchors are in the body perspective while Ground anchors are in the world perspective). \n
+	 *	<b> The revolving bar with the ball on it, which when triggered by the pulley sets the ball onto the curve. </b> \n
+	 *	The ball is used to trigger the pendulum which knocks the dominos down to set the next stage of the simulation. \n
+	 *	- b2PolygonShape shape - The dimensions of the bar (6.4x0.4).
+	 *	- b2BodyDef bd - The body definition of the bar (It being dynamic is the only property we require).
+	 *	- b2Body* body - The body object of the bar upon which the ball is placed.
+	 *	- b2Body* body3 - The invisible body that is used to connect the bar at a static location in the world.
+	 *	- b2BodyDef bd3 - The body definition of the invisible body which is located at (44,32.3) and (-44,32.3) for the right and left sides which coincides with the centre of the bar.
+	 *	- b2RevoluteJointDef jointDef - The joint definition object that connects the invisible body and the bar together (collideConnected is set to false as we do not want the box to
+	 *	rotate but only translate).
+	 *	- b2Body* ball - The body object of the ball that is placed directly above the joint of the bar.
+	 *	- b2CircleShape circle - The shape ball which is a circle of radius 0.5m.
+	 *	- b2FixtureDef bodyfd - The fixture definition of the ball with it's attributes defined.
+	 *	- b2BodyDef bodybd - The body definition of the ball which defines it's position in the world. \n
+	 *	<b> The Circular Path for the Ball </b> \n
+	 *	The ball falling off the revolving joint onto this curve collides with a pendulum to continue the simulation. The curve is approximated by using 11 short straight lines. \n
+	 *	- b2Body * curve1 and curve2 - The body objects of the curves on the left and right sides of the simulation.
+	 *	- b2EdgeShape[] shape1 and shape2 - These are the arrays that store the length and locations of each of the 11 lines used.
+	 *	- b2BodyDef[] shape1bd and shape2bd - These arrays store the body definitions needed for creating each of the lines.
+	 *	- b2FixtureDef[] shape1fd and shape2fd - These arrays store the fixture definitions of each of the curves (Friction and Restitution are required for these curves).
+	 *	- A circular arc is created for making the path of the ball. \n
+	 *	<b> The Pendulum </b> \n
+	 *	The pendulum is triggered by the ball that falls on the curve and it in turn knocks down the set of dominos that follow. \n
+	 *	- b2Body* ball and ball2 - The bobs of the pendulum (the body objects).
+	 *	- b2CircleShape circle - The shape of the bobs at the end of the pendulum (a circle of radius 0.3m).
+	 *	- b2BodyDef bodybd - The body definition of the bobs (They are dynamic and are located at (37,15.5) and (-37,15.5) for the right and left sides).
+	 *	- b2FixtureDef bodyfd - The fixture definition of the bobs (the friction, density and the restitution of the bobs are set here).
+	 *	- b2BodyDef bd2 - The body definition of the point where the pendulum is nailed to the wall.
+	 *	- b2Body* body2 and body22 - The body objects of the invisible bodies attached to the wall from where the bobs are suspended.
+	 *	- b2RevoluteJointDef jointDef - The joint definition of the joint which connects the bob of the pendulum to the nail in the wall. \n
+	 *	<b> The Shelf With the Dominos </b> \n
+	 *	This is the shelf upon which the dominos in the simulation lie. \n
+	 *	- b2PolygonShape shape - The shape of the shelf (a box with dimensions 6.0x0.2).
+	 *	- b2BodyDef bd - The body definition of the shelf, positioned at (32.0,14.8) and (-32.0,14.8) for the right and left sides of the simulation.
+	 *	- b2Body* pan1 and pan2 - The body objects of the two shelves in the simulation. \n
+	 *	<b> The Dominos </b> \n
+	 *	These are the dominos that are set in motion by the collision with the bob of the pendulum. The last domino collides with the large sphere described
+	 *	in the next section to continue the simulation. \n
+	 *	- b2PolygonShape shape - This defines the shape of each domino (A box of dimensions 0.2x2.0).
+	 *	- b2FixtureDef fd - The fixture definition of the 6 identical dominos (density is 10.0 and friction is 0.1).
+	 *	- b2BodyDef bd - An object of b2BodyDef is created each time for each of the dominos in the simulation and represents
+	 *	  the body definition of the domino currently being constructed.
+	 *	- b2Body* body - The body object of the domino being constructed.
+	 *	- The dominos are positioned on the shelf described in the above section. \n
+	 *	<b> Slanted Path for Large Sphere </b> \n
+	 *	This is the path followed by the large sphere that is triggered by the falling of the last domino. \n
+	 *	- b2Body* b1 and b2 - These are the body objects corresponding to the two paths on the two sides of the simulaion.
+	 *	- b2EdgeShape shape - This defines the start and end points on the path.
+	 *	- b2BodyDef bd - This is the body definition required to make the path appear in the simulation.\n
+	 *	<b> The Big Sphere on The Slope </b> \n
+	 *	This is the sphere that uses that path described in the section before this one to fall onto the see-saw structure
+	 *	and launch the light box into the air.
+	 *	- b2Body* spherebody and spherebody2 - The body objects corresponding to the two spheres on the two sides of the simulation.
+	 *	- b2CircleShape circle - The shape of the sphere which is a cricle of radius 2.0.
+	 *	- b2FixtureDef ballfd - The fixture definition of the sphere which sets the density (15.0), friction (0) and restitution (0) of the sphere.
+	 *	- b2BodyDef ballbd - The body definition of the sphere. The spheres are located at (26.0,14.8) and (-26.0,14.8) right above the path that
+	 *	  they roll down. \n
+	 *	<b> The See-Saw Systems </b> \n
+	*/
   dominos_t::dominos_t()
   {
 

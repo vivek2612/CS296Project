@@ -130,8 +130,8 @@ comprised 12.5 \% of the total running time.
 
 \subsection{Difference in the Analysis Files}
 
-In both versions the function taking the largest amount of time was the SolveVelocityConstraints() in
-b2ContactSolver.cpp. The distinction between the two runs with iteration values at and above 5000 was
+In both versions the functions taking the largest amount of time was the SolveVelocityConstraints() in
+b2ContactSolver.cpp and in the joint computation. The distinction between the two runs with iteration values at and above 5000 was
 the absence of several functions relating to the Vector class b2Vec2. One of the optimizations of 
 the -O3 tag is the one that includes smaller functions as inline functions. This increses the size of
 the executable but greatly speeds up the execution of the program as the program pointer does not need
@@ -234,6 +234,16 @@ a\times(b+c) = a\times b + a \times c
 a\times(b\times c) = (a.c)b - (a.b)c
 \end {equation}
 
+\subsection {Profiling Conclusions}
+
+From the profiling data for the Rube Goldberg machine, we noticed that most of the optimizations that we had observed
+in the code right from making functions inline to adjusting memory allocation within loops was already being handled by
+the -O3 optimization flag. There doesn't seem to be any significant gain in performance that we could achieve by 
+investigating the code further. Therefore, we feel that at our current level of knowledge, it is difficult to further
+improve on the optimizations made by the -O3 flag and have thus, left the code unchanged. All of the changes observed
+in the solvevelocityconstraints functions can also be made in the other functions Solve and TimeOfImpact functions to 
+improve performance as seen in the call graphs which indicate similar branching in the function calls.
+
 \newpage
 
 \section {The Rube Goldberg Machine}
@@ -253,6 +263,26 @@ essentially meant having to parallel branches to the machine that would come tog
 tent. To make the machine symmetric was an obvious way to achieve this goal and this also ensured synchronicity 
 between the two processes without any extra effort. This was also easy to reconcile with the goal of the machine
 as the tent was symmetric in nature. Also, we have a bull. And he's angry.
+
+\subsection {The Design of the Rube Goldberg Machine}
+
+The machine starts with the dropping of a single ball from the roof of the simulation, persumably by some tired and
+weary camper in need of rest. This sets in motion two balls that it collides with in opposite directions which roll 
+across the shelf at the top of the simulation and collide with a revolving bar hinged to the edge of the shelf. 
+This bar rotates about this hinge and hits another (no prizes for guessing) ball. To stop the two stray balls from
+the top of the simulation from falling off the shelf and wrecking the poor camper's tent, we improvised on the
+design of the shelf to introduce two vertical bars to stop the balls falling off (these would eventually form the
+horns of the bull but more on that later). The two other balls now roll off the shelf to set in motion a series of
+interlocking revolving bars and subsequently fall into another improvisation forming the nostrils of the bull giving
+him his charming personality. Now back to the simulation, the ball set in motion by the revolving bars falls into
+the frustum which pushes it onto a pulley. The bar at the other end of the pulley rises and sets yet another
+revolving bar in motion. The ball of the aforementioned bar, falls onto a smooth slope which guides the ball into
+the path of a pendulum which is powerless to do anything about it. The hapless pendulum then gets clobbered onto 
+the set of dominos lined up which fall like . . . well . . . dominos. The last domino falls onto a ball which rolls
+down a slope and falls on one of the arms of a See saw at the bottom of the simulation. The other end of the See-saw
+holds a small square box which is launched into the air by the heavy ball. This square box is redirected by an 
+aptly placed static bar into a small container connected to a pulley connected to the tent thus raising it for
+our (now) happy traveller.
 
 \subsection {Deviations from Original Design}
 

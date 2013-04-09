@@ -1,0 +1,11 @@
+unset log
+reset
+set title "Average Steptime Over Reruns with Rrror Bars v/s Iteration Values"
+ set datafile separator ','
+set xlabel "Rerun Value"
+set ylabel "Averge Step Time(ms)"
+
+set key inside default title ""  box linewidth 1.0
+set term png
+set output "../plots/g14_plot04.png"
+plot "../data/Temp6.csv" using 1:2:3 with yerrorbars  title "StepTime"

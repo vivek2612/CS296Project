@@ -1,0 +1,12 @@
+unset log
+reset
+set datafile separator ','
+set title "Step Time and Loop Time v/s Iteration Value"
+set xlabel "Iteration Value"
+set ylabel "Time (ms) Averaged over Reruns"
+
+set key inside default title "Legend"  box linewidth 1.0
+ set term png
+set output "../plots/g14_plot01.png"
+plot "../data/lab05_g14_data.csv" using 2:3 smooth unique with point title "stepTime", "../data/lab05_g14_data.csv" using 2:7 smooth unique with point title "LoopTime"
+

@@ -10,17 +10,28 @@ CAT	= cat
 PRINTF	= printf
 SED	= sed
 DOXYGEN = doxygen
+LATEX = latex
+DVIPDF = dvipdf
 ######################################
 # Project Name (generate executable with this name)
-TARGET = cs296_base
+TARGET_EXEC = RubeGoldbergMachine
+TARGET_PLOTS = RubeGoldbergMachinePlots
 
 # Project Paths
 PROJECT_ROOT=.
 EXTERNAL_ROOT=$(PROJECT_ROOT)/external
-SRCDIR = $(PROJECT_ROOT)/src
+SRCDIREXEC = $(PROJECT_ROOT)/src_exec
+SRCDIRPLOTS = $(PROJECT_ROOT)/src_plots
 OBJDIR = $(PROJECT_ROOT)/obj
+OBJDIRPLOTS = $(PROJECT_ROOT)/obj_plots
 BINDIR = $(PROJECT_ROOT)/bin
 DOCDIR = $(PROJECT_ROOT)/doc
+DATADIR = $(PROJECT_ROOT)/data
+SCRIP = $(PROJECT_ROOT)/scripts
+PLOTDIR = $(PROJECT_ROOT)/plots
+BOX2DLIBRARY = $(PROJECT_ROOT)/external/lib/libBox2D.a
+BOX2DINCLUDE = $(PROJECT_ROOT)/external/include/Box2D
+DVIFILE := $(LATEXFILE:$(DOCDIR)/%.tex=$(PROJECT_ROOT)/%.dvi)
 
 # Library Paths
 BOX2D_ROOT=$(EXTERNAL_ROOT)
@@ -52,23 +63,39 @@ ERR_FMT="${ERR_COLOR}%30s\n${NO_COLOR}"
 WARN_FMT="${WARN_COLOR}%30s\n${NO_COLOR}"
 ######################################
 
-SRCS := $(wildcard $(SRCDIR)/*.cpp)
-INCS := $(wildcard $(SRCDIR)/*.hpp)
-OBJS := $(SRCS:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+SRCSEXEC := $(wildcard $(SRCDIREXEC)/*.cpp)
+INCSEXEC := $(wildcard $(SRCDIREXEC)/*.hpp)
+OBJS_EXEC := $(SRCSEXEC:$(SRCDIREXEC)/%.cpp=$(OBJDIR)/%.o)
+
+SRCSPLOTS := $(wildcard $(SRCDIRPLOTS)/*.cpp)
+INCSPLOTS := $(wildcard $(SRCDIRPLOTS)/*.hpp)
+OBJS_PLOTS := $(SRCSPLOTS:$(SRCDIRPLOTS)/%.cpp=$(OBJDIRPLOTS)/%.o)
 
 
-.PHONY: all setup doc clean distclean
+.PHONY: all setup doc clean distclean compileb2D
 
-all: setup $(BINDIR)/$(TARGET)
+all: compileb2D setup report doc $(BINDIR)/$(TARGET_EXEC)
 
 setup:
 	@$(ECHO) "Setting up compilation..."
 	@mkdir -p obj
 	@mkdir -p bin
+	@mkdir -p obj_plots
 
-$(BINDIR)/$(TARGET): $(OBJS)
+$(BINDIR)/$(TARGET_PLOTS): $(OBJS_PLOTS)
 	@$(PRINTF) "$(MESG_COLOR)Building executable:$(NO_COLOR) $(FILE_COLOR) %16s$(NO_COLOR)" "$(notdir $@)"
-	@$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LIBS) 2> temp.log || touch temp.err
+	@$(CC) -o $@ $(LDFLAGS) $(OBJS_PLOTS) $(LIBS) 2> temp.log || touch temp.err
+	@if test -e temp.err; \
+	then $(PRINTF) $(ERR_FMT) $(ERR_STRING) && $(CAT) temp.log; \
+	elif test -s temp.log; \
+	then $(PRINTF) $(WARN_FMT) $(WARN_STRING) && $(CAT) temp.log; \
+	else $(PRINTF) $(OK_FMT) $(OK_STRING); \
+	fi;
+	@$(RM) -f temp.log temp.err
+	
+$(BINDIR)/$(TARGET_EXEC): $(OBJS_EXEC)
+	@$(PRINTF) "$(MESG_COLOR)Building executable:$(NO_COLOR) $(FILE_COLOR) %16s$(NO_COLOR)" "$(notdir $@)"
+	@$(CC) -o $@ $(LDFLAGS) $(OBJS_EXEC) $(LIBS) 2> temp.log || touch temp.err
 	@if test -e temp.err; \
 	then $(PRINTF) $(ERR_FMT) $(ERR_STRING) && $(CAT) temp.log; \
 	elif test -s temp.log; \
@@ -77,9 +104,10 @@ $(BINDIR)/$(TARGET): $(OBJS)
 	fi;
 	@$(RM) -f temp.log temp.err
 
--include $(OBJS:.o=.d)
+-include $(OBJS_EXEC:.o=.d)
+-include $(OBJS_PLOTS:.o=.d)
 
-$(OBJS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
+$(OBJS_EXEC):  $(OBJDIR)/%.o : $(SRCDIREXEC)/%.cpp
 	@$(PRINTF) "$(MESG_COLOR)Compiling: $(NO_COLOR) $(FILE_COLOR) %25s$(NO_COLOR)" "$(notdir $<)"
 	@$(CC) $(CPPFLAGS) -c $< -o $@ -MD 2> temp.log || touch temp.err
 	@if test -e temp.err; \
@@ -90,15 +118,38 @@ $(OBJS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	fi;
 	@$(RM) -f temp.log temp.err
 
+$(OBJS_PLOTS): $(OBJDIRPLOTS)/%.o : $(SRCDIRPLOTS)/%.cpp
+	@$(PRINTF) "$(MESG_COLOR)Compiling: $(NO_COLOR) $(FILE_COLOR) %25s$(NO_COLOR)" "$(notdir $<)"
+	@$(CC) $(CPPFLAGS) -c $< -o $@ -MD 2> temp.log || touch temp.err
+	@if test -e temp.err; \
+	then $(PRINTF) $(ERR_FMT) $(ERR_STRING) && $(CAT) temp.log; \
+	elif test -s temp.log; \
+	then $(PRINTF) $(WARN_FMT) $(WARN_STRING) && $(CAT) temp.log; \
+	else printf "${OK_COLOR}%30s\n${NO_COLOR}" "[OK]"; \
+	fi;
+	@$(RM) -f temp.log temp.err	
+
+compileb2D: 
+	@cd $(EXTERNAL_ROOT)/src ; tar -zxvf Box2D.tgz ; \
+	cd Box2D; rm -rf build296; mkdir build296; cd build296; \
+	cmake -DCMAKE_BUILD_TYPE=Release ../. ; \
+	make ; make install;
+
 doc:
 	@$(ECHO) -n "Generating Doxygen Documentation ...  "
 	@$(RM) -rf doc/html
 	@$(DOXYGEN) $(DOCDIR)/Doxyfile 2 > /dev/null
 	@$(ECHO) "Done"
 
+report: 
+	@cd $(DOCDIR); $(LATEX) RubeGoldbergAnalysis.tex; $(DVIPDF) RubeGoldbergAnalysis.dvi; $(RM) -rf *.dvi *~ *.aux *.log
+	@$(RM) -rf *.dvi *~ *.aux *.log
+
 clean:
 	@$(ECHO) -n "Cleaning up..."
-	@$(RM) -rf $(OBJDIR) *~ $(DEPS) $(SRCDIR)/*~
+	@$(RM) -rf $(OBJDIR) $(OBJDIRPLOTS) $(BINDIR) *~ $(DEPS) $(SRCDIR)/*~ $(DOCDIR)/*.pdf $(DOCDIR)/*.log $(DOCDIR)/*.aux $(DOCDIR)/*~ $(DOCDIR)/*.dvi $(DATADIR) $(PLOTDIR) $(DOCDIR)/html
+	@$(RM) -rf $(PROJECT_ROOT)/external/include $(PROJECT_ROOT)/external/lib $(PROJECT_ROOT)/external/src/Box2D
+	@$(RM) -rf *.dat *.out
 	@$(ECHO) "Done"
 
 distclean: clean

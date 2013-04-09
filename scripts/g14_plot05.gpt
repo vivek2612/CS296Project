@@ -15,7 +15,7 @@ bin(x,width)=width*floor(x/width)
 set macro
 set style fill solid 1.0 noborder
  set term png
-set output "../plots/g14_plot05.png
+set output "../plots/g14_plot06.png
 plot "../data/Temp5.csv" using (bin($1,bw)+bw/2): (2.0)  smooth frequency with boxes title "Freq", \
 '' using ($1):(1.0) smooth cumulative axes x1y2 with lines title "Cum Freq"
 

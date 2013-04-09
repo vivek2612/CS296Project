@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 import re
 
-f = open("../doc/g14_prof_report.tex")
+f = open("../doc/RubeGoldbergAnalysis.tex")
 report = f.read()
 f.close()
 title = re.search(".*\\\\title(.*)\\\\maketitle.*",report,re.S)
@@ -51,14 +51,15 @@ for subsection in plots:
 		tempImg.append(temp2.group(1))
 	subsection_images.append(tempImg)
 
-f = open("../doc/g14_lab09_report.html",'w')
-f.write("<!DOCTYPE html>" + "\n" + ("<html>") + "\n" + ("<head>") + "\n" + ("<title>") + "\"" + html_title + "\"" + ("</title>") + ("</head>" + "\n" + ("<body>") + "\n" + ("<div>") + "\n" + "<center>" + ("<h1>") + "Analysis of Performance Plots Obtained by Repeated Runs of the Base Code" + ("</h1>") + "</center>" + "\n"))
+f = open("../doc/RubeGoldbergMachine.html",'w')
+f.write("<!DOCTYPE html>" + "\n" + ("<html>") + "\n" + ("<head>") + "\n" + ("<title>") + "\"" + html_title + "\"" + ("</title>") + ("</head>" + "\n" + ("<body>") + "\n" + ("<div>") + "\n" + "<center>" + ("<h1>") + "Analysis of Performance Plots Obtained by Repeated Runs of the Rube Goldberg Machine and Comparison With the Dominos Base Code " + ("</h1>") + "</center>" + "\n"))
 f.write("<h3>" + "<center>" + author1[0] + "<br>" + author1[1] + "<br>" + author2[0] + "<br>" + author2[1] + "<br>" + author3[0] + "<br>" + author3[1] + "</center>" + "</h3>")
 j = 1
 for i in range(0,len(subsection_images)):
 	f.write( "<center>" + "<h2>" + subsection_titles[i] + ("</h1>") + "</center>" + "\n")
 	for img in subsection_images[i]:
-		f.write( "<center>" + "<img" + " " + ("src=") + "\"" + "../plots/" + "g14_lab09_plot0" + str(j) + ".png" + "\"" + (">") + ("</img>") + "</center>" + "\n" + "\n")
+		f.write( "<center>" + "<img" + " " + ("src=") + "\"" + "../plots/" + "g14_plot0" + str(j) + ".png" + "\"" + (">") + ("</img>") + "</center>" + "\n" + "\n")
 		j = j+1;
 	f.write(("<p>") + "<center>" + "\n" + subsection_body[i] + "</center>" + ("</p>") + ("<hr>") + "\n")
+f.write ("Take a look at our <a href = \" \"> Rube Goldberg machine </a> Thank you :) " + "\n" )
 f.write(("</div>") + "\n" + ("</body>") + "\n" + ("</html>"))

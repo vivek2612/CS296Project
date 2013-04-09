@@ -18,7 +18,9 @@ TARGET_EXEC = RubeGoldbergMachine
 TARGET_PLOTS = RubeGoldbergMachinePlots
 
 # Project Paths
-PROJECT_ROOT=.
+PROJECT_ROOT = $(shell pwd)
+DATADIR = $(PROJECT_ROOT)/data
+PLOTDIR = $(PROJECT_ROOT)/plots
 EXTERNAL_ROOT=$(PROJECT_ROOT)/external
 SRCDIREXEC = $(PROJECT_ROOT)/src_exec
 SRCDIRPLOTS = $(PROJECT_ROOT)/src_plots
@@ -74,7 +76,7 @@ OBJS_PLOTS := $(SRCSPLOTS:$(SRCDIRPLOTS)/%.cpp=$(OBJDIRPLOTS)/%.o)
 
 .PHONY: all setup doc clean distclean compileb2D
 
-all: compileb2D setup report doc $(BINDIR)/$(TARGET_EXEC)
+all: setup report doc $(BINDIR)/$(TARGET_EXEC)
 
 setup:
 	@$(ECHO) "Setting up compilation..."
@@ -82,7 +84,7 @@ setup:
 	@mkdir -p bin
 	@mkdir -p obj_plots
 
-$(BINDIR)/$(TARGET_PLOTS): $(OBJS_PLOTS)
+$(BINDIR)/$(TARGET_PLOTS): compileb2D setup $(OBJS_PLOTS)
 	@$(PRINTF) "$(MESG_COLOR)Building executable:$(NO_COLOR) $(FILE_COLOR) %16s$(NO_COLOR)" "$(notdir $@)"
 	@$(CC) -o $@ $(LDFLAGS) $(OBJS_PLOTS) $(LIBS) 2> temp.log || touch temp.err
 	@if test -e temp.err; \
@@ -93,7 +95,7 @@ $(BINDIR)/$(TARGET_PLOTS): $(OBJS_PLOTS)
 	fi;
 	@$(RM) -f temp.log temp.err
 	
-$(BINDIR)/$(TARGET_EXEC): $(OBJS_EXEC)
+$(BINDIR)/$(TARGET_EXEC): compileb2D setup $(OBJS_EXEC)
 	@$(PRINTF) "$(MESG_COLOR)Building executable:$(NO_COLOR) $(FILE_COLOR) %16s$(NO_COLOR)" "$(notdir $@)"
 	@$(CC) -o $@ $(LDFLAGS) $(OBJS_EXEC) $(LIBS) 2> temp.log || touch temp.err
 	@if test -e temp.err; \
@@ -135,6 +137,16 @@ compileb2D:
 	cmake -DCMAKE_BUILD_TYPE=Release ../. ; \
 	make ; make install;
 
+datadir:
+	@chmod +x $(SCRIP)/*.sh
+	@mkdir -p $(DATADIR) 
+	@mkdir -p $(PLOTDIR)
+
+plots : datadir $(BINDIR)/$(TARGET_PLOTS)
+	@ cd $(SCRIP);$(SCRIP)/gen_data_csv.sh;$(SCRIP)/helper6.sh;$(SCRIP)/helper5.sh;gnuplot $(SCRIP)/g14_plot01.gpt;gnuplot $(SCRIP)/g14_plot02.gpt;gnuplot $(SCRIP)/g14_plot03.gpt;gnuplot $(SCRIP)/g14_plot04.gpt;gnuplot $(SCRIP)/g14_plot05.gpt;gnuplot $(SCRIP)/g14_plot06.gpt;
+	@ rm -rf $(DATADIR)/Temp*.csv $(DATADIR)/*~ $(SCRIP)/*~ $(DATADIR)/*~
+	@ rm -rf $(DATADIR)
+
 doc:
 	@$(ECHO) -n "Generating Doxygen Documentation ...  "
 	@$(RM) -rf doc/html
@@ -145,9 +157,17 @@ report:
 	@cd $(DOCDIR); $(LATEX) RubeGoldbergAnalysis.tex; $(DVIPDF) RubeGoldbergAnalysis.dvi; $(RM) -rf *.dvi *~ *.aux *.log
 	@$(RM) -rf *.dvi *~ *.aux *.log
 
+install : setup report doc htmlDoc $(BINDIR)/$(TARGET_EXEC)
+
+dist : clean
+	@ cd ../ ; tar zcvf cs296_g14_project.tar.gz CS296Project ;
+
+htmlDoc : plots
+	@ cd $(SCRIP) ; python3 g14_gen_html.py;
+
 clean:
 	@$(ECHO) -n "Cleaning up..."
-	@$(RM) -rf $(OBJDIR) $(OBJDIRPLOTS) $(BINDIR) *~ $(DEPS) $(SRCDIR)/*~ $(DOCDIR)/*.pdf $(DOCDIR)/*.log $(DOCDIR)/*.aux $(DOCDIR)/*~ $(DOCDIR)/*.dvi $(DATADIR) $(PLOTDIR) $(DOCDIR)/html
+	@$(RM) -rf $(OBJDIR) $(OBJDIRPLOTS) $(BINDIR) *~ $(DEPS) $(SRCDIR)/*~ $(DOCDIR)/*.pdf $(DOCDIR)/*.log $(DOCDIR)/*.aux $(DOCDIR)/*~ $(DOCDIR)/*.dvi $(DOCDIR)/*.html $(DATADIR) $(PLOTDIR) $(DOCDIR)/html
 	@$(RM) -rf $(PROJECT_ROOT)/external/include $(PROJECT_ROOT)/external/lib $(PROJECT_ROOT)/external/src/Box2D
 	@$(RM) -rf *.dat *.out
 	@$(ECHO) "Done"

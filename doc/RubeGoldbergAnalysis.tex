@@ -9,11 +9,13 @@
 \usepackage{subfigure}
 \usepackage{amsmath}
 \usepackage{float}
+\usepackage{cite}
+\usepackage{graphicx}
 \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 \makeatletter
 \setlength{\@fptop}{0pt}
 \makeatother
-
+\bibliographystyle{plain}
 \begin{document}
 \title {Analysis of Profiler Output and the Rube Goldberg Machine}
 \author 	{	Vivek Agarwal \\
@@ -35,7 +37,7 @@ We also compare our target Rube Goldberg machine to the one we've built and pres
 
 \section{Plot Analysis}
 
-\subsection{Plot 1}
+\subsection{Plot 1} \cite{1,2}
 
 \begin {figure} [ht]
 \begin {center}
@@ -44,16 +46,17 @@ We also compare our target Rube Goldberg machine to the one we've built and pres
 \caption {Plot - 1}
 \end {figure}
 
+
 In the plot for lab 9, we observed that the average Step time decreases while the total loop time
 increases with the number of iterations. The graph obtained in the case of the Rube Goldberg machine
 was very similar with a change in slope being observed in the total loop time as was the case with
 the dominos code. Again, we attribute both to the fact that linux prioritizes programs. Again 
 programs with higher priorities seem to be given more resources and we believe that this is the 
 cause of the speed up. The more resources for roughly the same computation per iteration cause 
-the program to run faster and this results in the change in slope and the decreasing average Step
+the program to run faster and this results in the change in slope and the decreasing average Step\cite{2}
 time per iteration.
 
-\subsection{Plot 2}
+\subsection{Plot 2}\cite{1,2}
 
 \begin {figure} [H]
 \begin {center}
@@ -81,7 +84,7 @@ The results of this plot yield little information about the functioning of the l
 The plots are basically straight lines which shows that re-run values seem to have little to
 no effect on the performance of the program. This could maybe show that linux does not 
 maintain information about the previous time that a program was run and the type of computations
-that the program carried out.
+that the program carried out.\cite{rube}
 
 \subsection{Plot 4}
 
@@ -116,7 +119,7 @@ In this graph, the distribution of average step times for an iteration number of
 random than the one we had obtained for Lab 9. A particularly high peak is noticed near the lowest
 range of average step times but nothing substantial enough for us to draw reasonable conclusions.
 
-\section{Performance Gains Upon Using the -O3 Flag}
+\section{Performance Gains Upon Using the -O3 Flag}\cite{3,4}
 
 Based on the results of Lab 9, we ran the simulation for 50000 iterations and we found that this
 was sufficient to differentiate the optimized version of the code from the non-optimized or the
@@ -246,7 +249,7 @@ improve performance as seen in the call graphs which indicate similar branching 
 
 \newpage
 
-\section {The Rube Goldberg Machine}
+\section {The Rube Goldberg Machine}\cite{rube,5}
 
 \subsection {The Goal of The Rube Goldberg Machine}
 
@@ -329,5 +332,5 @@ bull satisfies both those properties while the other modifications were simply t
 the simulation together. All in all, we have constructed the Rube Goldberg machine that we set out to build
 without significantly deviating from the original design and for the most part we have succeeded in our effort.
  
-
+\bibliography{ref}
 \end{document}

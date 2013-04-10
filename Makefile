@@ -12,6 +12,8 @@ SED	= sed
 DOXYGEN = doxygen
 LATEX = latex
 DVIPDF = dvipdf
+BIBTEX = bibtex
+PYTHON3 = python3
 ######################################
 # Project Name (generate executable with this name)
 TARGET_EXEC = RubeGoldbergMachine
@@ -77,7 +79,7 @@ OBJS_PLOTS := $(SRCSPLOTS:$(SRCDIRPLOTS)/%.cpp=$(OBJDIRPLOTS)/%.o)
 
 .PHONY: all setup doc clean distclean compileb2D
 
-all: setup report doc $(BINDIR)/$(TARGET_EXEC)
+all: setup report doc htmlDoc $(BINDIR)/$(TARGET_EXEC)
 
 setup:
 	@$(ECHO) "Setting up compilation..."
@@ -139,13 +141,12 @@ compileb2D:
 	make ; make install;
 
 datadir:
-	@chmod +x $(SCRIP)/*.sh
+	@chmod +x $(SCRIP)/*
 	@mkdir -p $(DATADIR) 
 	@mkdir -p $(PLOTDIR)
 
 plots : datadir $(BINDIR)/$(TARGET_PLOTS)
-	@ cd $(SCRIP);$(SCRIP)/gen_data_csv.sh;$(SCRIP)/helper6.sh;$(SCRIP)/helper5.sh;gnuplot $(SCRIP)/g14_plot01.gpt;gnuplot $(SCRIP)/g14_plot02.gpt;gnuplot $(SCRIP)/g14_plot03.gpt;gnuplot $(SCRIP)/g14_plot04.gpt;gnuplot $(SCRIP)/g14_plot05.gpt;gnuplot $(SCRIP)/g14_plot06.gpt;
-	@ rm -rf $(DATADIR)/Temp*.csv $(DATADIR)/*~ $(SCRIP)/*~ $(DATADIR)/*~
+	@ cd $(SCRIP) ; $(PYTHON3) g14_gen_csv.py ; $(PYTHON3) g14_gen_plots.py ; 
 	@ rm -rf $(DATADIR)
 
 doc:
@@ -155,8 +156,11 @@ doc:
 	@$(ECHO) "Done"
 
 report: 
-	@cd $(DOCDIR); $(LATEX) RubeGoldbergAnalysis.tex; $(DVIPDF) RubeGoldbergAnalysis.dvi; $(RM) -rf *.dvi *~ *.aux *.log
-	@$(RM) -rf *.dvi *~ *.aux *.log
+	@cd $(DOCDIR); $(LATEX) RubeGoldbergAnalysis.tex; \
+	 $(BIBTEX) RubeGoldbergAnalysis.aux ; $(LATEX) RubeGoldbergAnalysis.tex ; \
+	 $(LATEX) RubeGoldbergAnalysis.tex ; \
+	 $(DVIPDF) RubeGoldbergAnalysis.dvi ; \
+	 $(RM) -rf *.dvi *~ *.aux *.log *.blg *.bbl
 
 install : setup report doc htmlDoc $(BINDIR)/$(TARGET_EXEC)
 	@mkdir -p $(INSTALLPATH)
@@ -176,7 +180,7 @@ htmlDoc : plots
 
 clean:
 	@$(ECHO) -n "Cleaning up..."
-	@$(RM) -rf $(OBJDIR) $(OBJDIRPLOTS) $(BINDIR) *~ $(DEPS) $(SRCDIR)/*~ $(DOCDIR)/*.pdf $(DOCDIR)/*.log $(DOCDIR)/*.aux $(DOCDIR)/*~ $(DOCDIR)/*.dvi $(DOCDIR)/*.html $(DATADIR) $(PLOTDIR) $(DOCDIR)/html
+	@$(RM) -rf $(OBJDIR) $(OBJDIRPLOTS) $(BINDIR) *~ $(DEPS) $(SRCDIR)/*~ $(DOCDIR)/*.pdf $(DOCDIR)/*.log $(DOCDIR)/*.aux $(DOCDIR)/*~ $(DOCDIR)/*.dvi $(DOCDIR)/*.html $(DATADIR) $(PLOTDIR) $(DOCDIR)/html $(DOCDIR)/*.bbl $(DOCDIR)/*.blg 
 	@$(RM) -rf $(PROJECT_ROOT)/external/include $(PROJECT_ROOT)/external/lib $(PROJECT_ROOT)/external/src/Box2D
 	@$(RM) -rf *.dat *.out
 	@$(RM) -rf $(INSTALLPATH)

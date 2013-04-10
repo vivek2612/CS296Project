@@ -39,71 +39,17 @@ using namespace std;
 
 namespace cs296
 {
-<<<<<<< HEAD
-	/*! Documentation of the constructor of the dominos_t class modified to run the Rube Goldberg Machine of Group 14 \n
-=======
 	/*! <b>Documentation of the constructor of the dominos_t class modified to run the Rube Goldberg Machine of Group 14 </b>\n \n
->>>>>>> origin/Yeshwanth
 	 *	\b Ground \n
 	 *	This describes the construction of the Ground Block of the Rube Goldberg Machine. It is the lowest possible level in the simulation. 
 	 *	- b2EdgeShape shape - This describes the shape of the ground block. It is a single static edge from -90.0m to 90m in the x-coordinate and at a constant -15.0m in the y-coordinate. \n
 	 *	- b2BodyDef bd - The body definition associated with the static body. 
-<<<<<<< HEAD
-	 *	- b2Body* b1 - The body associated with the static body Ground. It does not have a fixture as it is a static edge and is not required. 
-=======
 	 *	- b2Body\* b1 - The body associated with the static body Ground. It does not have a fixture as it is a static edge and is not required. \n 
 	 *	.
->>>>>>> origin/Yeshwanth
 	 *	<b> The Long Top Horizontal Shelf </b> \n
 	 *	This describes the long horizontal shelf at the top upon which the two balls which start the simulation lie.
 	 *	- b2PolygonShape shape - This describes the shape of the shelf (A box of dimensions 60.0mx0.20m)
 	 * 	- b2BodyDef bd - The body definition of the shelf which is located at 0.0m along the x axis and 50.0m along the y axis.	
-<<<<<<< HEAD
-	 *	- b2Body* topShelf - The body object associated with the shelf.
-	 *	<b> The Balls Responsible for Starting The Simulation </b> \n
-	 *	- The falling ball from the top
-	 *		- b2Body* fallingTopBall - The Body Object associated with the ball falling from the top.
-	 *		- b2CircleShape circle - It is a cricle of radius 1.0m.
-	 *		- b2FixtureDef bodyfd - Defines the density (200.0), friction (0.1) and restitution (0.0) of the ball.
-	 *		- b2BodyDef bodybd - Body definition of the ball (Dyanmic which falls from 65m in the air)
-	 *	- The right ball (The left ball is symmetric about x = 0.0)
-	 *		- b2Body* ball1 - The body object of the ball.
-	 *		- b2BodyDef ball1bd - The body definition of the ball at the right (it is at 1.8m along the x axis and at 51m along the y axis)
-	 *		- b2FixtureDef bodyfd - The same fixture is used for this ball as the one which collides with it except the density is 0.5f;
-	 *	<b> The Tilted Bar Attached To The Top-Shelf </b> \n
-	 *	- b2PolygonShape shape - It is a box with dimensions 4.0m and 0.2m rotated about it's end point by -45 degrees for the right side and 45 degrees for the left.
-	 *	- b2BodyDef bd - It's body definition consisting of the position of the object (32.6,48.5).
-	 *	- b2Body* tiltedBar - The body object associated with the tilted bar. 
-	 *	<b> The Eyebrows Of The Bull </b> \n
-	 *	- b2PolygonShape shape - They are set as static boxes of dimentions (10.0x0.10f) rotated by pi/6 or -pi/6 depending which eyebrow it is
-	 *	- b2BodyDef bd - The body definition of the eyebrows positioned at (32.6,48.5) for the right and (-32.6,48.5) for the left.
-	 *	- b2Body* tiltedBar - The body object associated with the eyebrow.
-	 *	<b> The Eyeballs </b> \n
-	 *	- b2Body* ball or ball2 - Body objects associated with the two eyes of the bull.
-	 *	- b2CircleShape circle - They are circles of radius 2.0m.
-	 *	- b2BodyDef bodybd - The body definition of the eyes (they are set at (12.0,35.5) and (-12.0,35.5)).
-	 *	- b2FixtureDef bodyfd - The fixtures associated with the eyeballs.
-	 *	<b> The Shelf Attached With Tilted Bar </b> \n
-	 *	The horizontal shelf which is attached to the bar at the top of the simulation through the slanted bars
-	 *	- b2PolygonShape shape - The shape definition of the shelf (Box with dim 4.0x0.20)
-	 *	- b2Body* shelf - Body object associated with shelf. It is a static body with no fixture definitions
-	 *	- b2BodyDef bd - The body definition of the shelf positioned at (35.0,47.0) and (-35.0,47.0) for the right and left sides.
-	 *  <b> The Vertical Revolving Bar Attached To The Shelf Described Above </b> \n
-	 *	- b2PolygonShape shape2 - The shape of the vertical bar (0.2x4.0).
-	 *	- b2BodyDef bd2 - Body definition of the bar positioned at (37.2,49.0) or (-37.2,49.0) for left or right sides and is a dynamic body.
-	 *	- b2FixtureDef *fd - The fixture definition of the bar density  is 2.0 units.
-	 *	- b2Body* shelf - The body object corresponding to the bar.
-	 *  <b> The joint connecting the two components described above </b> \n
-	 *	- b2RevoluteJointDef jointDef - The definition of the revolute joint connecting the two bodies.
-	 *	- The local anchors are set on the two bodies and this gives the vertical bar the ability to rotate about the joint.
-	 *	<b> Another Shelf </b> \n
-	 *	The shelf below the components described above
-	 *	- b2PolygonShape shape - The shape of the shelf (14mx0.2m)
-	 *	- It is static and it is positioned at (35.0,42.5) and (-35.0,42.5) for the right and left sides respectively.
-	 *	The Vertical Bar on the shelf that stops the two balls at the top from moving further
-	 *	- b2PolygonShape shape2 - The dimensions of the bar (0.2x4.0)
-	 *	- It is positioned at the end of the shelf to prevent the balls from moving further.
-=======
 	 *	- b2Body\* topShelf - The body object associated with the shelf. \n
 	 *	.
 	 *	<b> The Balls Responsible for Starting The Simulation </b> \n
@@ -159,16 +105,11 @@ namespace cs296
 	 *	- b2PolygonShape shape2 - The dimensions of the bar (0.2x4.0)
 	 *	- It is positioned at the end of the shelf to prevent the balls from moving further. \n
 	 *	.
->>>>>>> origin/Yeshwanth
 	 *	The ball on the shelf set in motion by the revolving bar described in the section preceeding. These eventually
 	 *	roll into the the face of the bull.
 	 *	- b2CircleShape circle - Circle of radius 1.0m
 	 * 	- b2FixtureDef bodyfd - Friction, density, shape and restitution of the balls are set.
 	 *	- b2BodyDef bodybd - It is a dynamic body positioned at (36.0,43.5) and (-36,43.5) for the right and left sided.
-<<<<<<< HEAD
-	 *	- b2Body* ball - The body object associated with the ball.
-	*/	
-=======
 	 *	- b2Body\* ball - The body object associated with the ball. \n
 	 *	.
 	 *	<b> The Three Rotatable Planks </b> \n
@@ -353,7 +294,6 @@ namespace cs296
 	 *	.
 	 *	<b> End of Documentation </b>
 	*/
->>>>>>> origin/Yeshwanth
   dominos_t::dominos_t()
   {
 
@@ -447,7 +387,6 @@ namespace cs296
       b2Body* topShelf2 = m_world->CreateBody(&bd);
       topShelf2->CreateFixture(&shape, 0.0f);
 
-<<<<<<< HEAD
     }
 
     // eyeballs
@@ -470,30 +409,6 @@ namespace cs296
       ball2=  m_world->CreateBody(&bodybd);
       ball2->CreateFixture(&bodyfd);
     }
-=======
-    }
-
-    // eyeballs
-    {
-      b2Body* ball; b2Body* ball2; 
-      b2CircleShape circle;
-      circle.m_radius = 2;
-    
-      b2FixtureDef bodyfd;
-      bodyfd.shape=&circle;
-      
-      b2BodyDef bodybd;
-      bodybd.type = b2_dynamicBody;
-      bodybd.gravityScale=0.0;
-      bodybd.position.Set(12.0f,35.5f);
-      ball=  m_world->CreateBody(&bodybd);
-      ball->CreateFixture(&bodyfd);
-
-      bodybd.position.Set(-12.0f,35.5f);
-      ball2=  m_world->CreateBody(&bodybd);
-      ball2->CreateFixture(&bodyfd);
-    }
->>>>>>> origin/Yeshwanth
     
  //tilted bar attached with the Topshelf
     {

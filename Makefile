@@ -34,6 +34,7 @@ PLOTDIR = $(PROJECT_ROOT)/plots
 BOX2DLIBRARY = $(PROJECT_ROOT)/external/lib/libBox2D.a
 BOX2DINCLUDE = $(PROJECT_ROOT)/external/include/Box2D
 DVIFILE := $(LATEXFILE:$(DOCDIR)/%.tex=$(PROJECT_ROOT)/%.dvi)
+INSTALLPATH = ./install
 
 # Library Paths
 BOX2D_ROOT=$(EXTERNAL_ROOT)
@@ -158,6 +159,14 @@ report:
 	@$(RM) -rf *.dvi *~ *.aux *.log
 
 install : setup report doc htmlDoc $(BINDIR)/$(TARGET_EXEC)
+	@mkdir -p $(INSTALLPATH)
+	@mkdir -p $(INSTALLPATH)/doc
+	@mv bin $(INSTALLPATH)/
+	@mv $(DOCDIR)/RubeGoldbergAnalysis.pdf $(INSTALLPATH)/doc/
+	@mv $(DOCDIR)/html $(INSTALLPATH)/doc/
+	@mv $(DOCDIR)/RubeGoldbergMachine.html $(INSTALLPATH)/doc/
+	@mv plots $(INSTALLPATH)/
+	@cp -rf scripts $(INSTALLPATH)/ 
 
 dist : clean
 	@ cd ../ ; tar zcvf cs296_g14_project.tar.gz CS296Project ;
@@ -170,6 +179,7 @@ clean:
 	@$(RM) -rf $(OBJDIR) $(OBJDIRPLOTS) $(BINDIR) *~ $(DEPS) $(SRCDIR)/*~ $(DOCDIR)/*.pdf $(DOCDIR)/*.log $(DOCDIR)/*.aux $(DOCDIR)/*~ $(DOCDIR)/*.dvi $(DOCDIR)/*.html $(DATADIR) $(PLOTDIR) $(DOCDIR)/html
 	@$(RM) -rf $(PROJECT_ROOT)/external/include $(PROJECT_ROOT)/external/lib $(PROJECT_ROOT)/external/src/Box2D
 	@$(RM) -rf *.dat *.out
+	@$(RM) -rf $(INSTALLPATH)
 	@$(ECHO) "Done"
 
 distclean: clean

@@ -173,5 +173,5 @@ int main(int argc, char** argv)
   dummy = gettimeofday(&end,NULL);
   time_taken_loop = ((end.tv_sec*1000000.0 + end.tv_usec) - (start.tv_sec*1000000.0 + start.tv_usec))/1000.0;
   printf("Total Iterations: %lu\nAverage time per step is %.4f ms\nAverage time for collisions is %.4f ms\nAverage time for velocity updates is %.4f ms\nAverage time for position updates is %.4f ms\n\nTotal time for loop is %.4f ms\n",iterations,(time_taken_step/iterations),(time_taken_collisions/iterations),(time_taken_velocity/iterations),(time_taken_position/iterations),time_taken_loop);
-  return 0;
+  return dummy;
 }

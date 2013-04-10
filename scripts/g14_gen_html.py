@@ -61,5 +61,5 @@ for i in range(0,len(subsection_images)):
 		f.write( "<center>" + "<img" + " " + ("src=") + "\"" + "../plots/" + "g14_plot0" + str(j) + ".png" + "\"" + (">") + ("</img>") + "</center>" + "\n" + "\n")
 		j = j+1;
 	f.write(("<p>") + "<center>" + "\n" + subsection_body[i] + "</center>" + ("</p>") + ("<hr>") + "\n")
-f.write ("Take a look at our <a href = \" \"> Rube Goldberg machine </a> Thank you :) " + "\n" )
+f.write ("Take a look at our <a href = \" http://www.cse.iitb.ac.in/~vivekcse/RubeGoldberg.html \"> Rube Goldberg machine </a> Thank you :) " + "\n" )
 f.write(("</div>") + "\n" + ("</body>") + "\n" + ("</html>"))
